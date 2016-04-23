@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423175945) do
+ActiveRecord::Schema.define(version: 20160423182304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,6 +190,17 @@ ActiveRecord::Schema.define(version: 20160423175945) do
     t.datetime "updated_at",   null: false
   end
 
+  create_table "translations", force: :cascade do |t|
+    t.uuid     "site_id"
+    t.uuid     "created_by_id"
+    t.uuid     "updated_by_id"
+    t.string   "key",                        null: false
+    t.jsonb    "values",        default: {}, null: false
+    t.integer  "completion",    default: 0,  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   add_foreign_key "content_assets", "sites"
   add_foreign_key "content_entries", "accounts", column: "created_by_id"
   add_foreign_key "content_entries", "accounts", column: "updated_by_id"
@@ -206,4 +217,7 @@ ActiveRecord::Schema.define(version: 20160423175945) do
   add_foreign_key "sites", "accounts", column: "created_by_id"
   add_foreign_key "snippets", "sites"
   add_foreign_key "theme_assets", "sites"
+  add_foreign_key "translations", "accounts", column: "created_by_id"
+  add_foreign_key "translations", "accounts", column: "updated_by_id"
+  add_foreign_key "translations", "sites"
 end

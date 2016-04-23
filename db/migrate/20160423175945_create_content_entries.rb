@@ -1,6 +1,6 @@
 class CreateContentEntries < ActiveRecord::Migration
   def change
-    create_table :content_entries do |t|
+    create_table :content_entries, id: :uuid do |t|
       # Site Scope
       t.uuid :site_id
 

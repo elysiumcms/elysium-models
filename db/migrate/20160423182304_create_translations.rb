@@ -1,6 +1,6 @@
 class CreateTranslations < ActiveRecord::Migration
   def change
-    create_table :translations do |t|
+    create_table :translations, id: :uuid do |t|
       # Site Scope
       t.uuid :site_id
 

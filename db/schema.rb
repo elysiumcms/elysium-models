@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423160051) do
+ActiveRecord::Schema.define(version: 20160423161732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,39 @@ ActiveRecord::Schema.define(version: 20160423160051) do
 
   add_index "memberships", ["account_id", "site_id"], name: "index_memberships_on_account_id_and_site_id", unique: true, using: :btree
 
+  create_table "pages", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "site_id"
+    t.uuid     "created_by_id"
+    t.uuid     "updated_by_id"
+    t.jsonb    "slug",                    default: {},          null: false
+    t.jsonb    "seo_title",               default: {},          null: false
+    t.jsonb    "meta_keywords",           default: {},          null: false
+    t.jsonb    "meta_description",        default: {},          null: false
+    t.uuid     "parent_id"
+    t.integer  "position",                                      null: false
+    t.integer  "depth",                   default: 0,           null: false
+    t.boolean  "is_layout",               default: false,       null: false
+    t.boolean  "allow_layout",            default: true,        null: false
+    t.uuid     "layout_id"
+    t.boolean  "templatized",             default: false,       null: false
+    t.boolean  "templatized_from_parent", default: false,       null: false
+    t.string   "target_klass_name"
+    t.boolean  "redirect",                default: false,       null: false
+    t.jsonb    "redirect_url",            default: {},          null: false
+    t.integer  "redirect_type",           default: 301,         null: false
+    t.boolean  "listed",                  default: true,        null: false
+    t.jsonb    "title",                   default: {},          null: false
+    t.jsonb    "fullpath",                default: {},          null: false
+    t.string   "handle"
+    t.jsonb    "raw_template",            default: {},          null: false
+    t.text     "locales",                 default: [],                       array: true
+    t.boolean  "published",               default: false,       null: false
+    t.boolean  "cache_enabled",           default: true,        null: false
+    t.string   "response_type",           default: "text/html", null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+  end
+
   create_table "sites", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.jsonb    "seo_title",                default: {},    null: false
     t.jsonb    "meta_keywords",            default: {},    null: false
@@ -86,5 +119,10 @@ ActiveRecord::Schema.define(version: 20160423160051) do
 
   add_foreign_key "memberships", "accounts"
   add_foreign_key "memberships", "sites"
+  add_foreign_key "pages", "accounts", column: "created_by_id"
+  add_foreign_key "pages", "accounts", column: "updated_by_id"
+  add_foreign_key "pages", "pages", column: "layout_id"
+  add_foreign_key "pages", "pages", column: "parent_id"
+  add_foreign_key "pages", "sites"
   add_foreign_key "sites", "accounts", column: "created_by_id"
 end

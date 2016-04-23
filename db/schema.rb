@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423183021) do
+ActiveRecord::Schema.define(version: 20160423185025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,76 @@ ActiveRecord::Schema.define(version: 20160423183021) do
     t.jsonb    "display_settings",                 default: {},    null: false
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
+  end
+
+  create_table "editable_controls", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "page_id"
+    t.string   "slug"
+    t.text     "block"
+    t.string   "content"
+    t.string   "hint"
+    t.integer  "priority",        default: 0,     null: false
+    t.boolean  "fixed",           default: false, null: false
+    t.boolean  "disabled",        default: false, null: false
+    t.boolean  "from_parent",     default: false, null: false
+    t.text     "locales",         default: [],                 array: true
+    t.boolean  "default_content", default: true,  null: false
+    t.text     "options",         default: [],                 array: true
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  create_table "editable_files", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "page_id"
+    t.string   "slug"
+    t.text     "block"
+    t.jsonb    "content",            default: {},    null: false
+    t.string   "hint"
+    t.integer  "priority",           default: 0,     null: false
+    t.boolean  "fixed",              default: false, null: false
+    t.boolean  "disabled",           default: false, null: false
+    t.boolean  "from_parent",        default: false, null: false
+    t.text     "locales",            default: [],                 array: true
+    t.string   "source"
+    t.jsonb    "default_source_url", default: {},    null: false
+    t.string   "resize_format"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  create_table "editable_models", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "page_id"
+    t.string   "slug"
+    t.text     "block"
+    t.jsonb    "content",     default: {},    null: false
+    t.string   "hint"
+    t.integer  "priority",    default: 0,     null: false
+    t.boolean  "fixed",       default: false, null: false
+    t.boolean  "disabled",    default: false, null: false
+    t.boolean  "from_parent", default: false, null: false
+    t.text     "locales",     default: [],                 array: true
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  create_table "editable_texts", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "page_id"
+    t.string   "slug"
+    t.text     "block"
+    t.jsonb    "content",         default: {},     null: false
+    t.string   "hint"
+    t.integer  "priority",        default: 0,      null: false
+    t.boolean  "fixed",           default: false,  null: false
+    t.boolean  "disabled",        default: false,  null: false
+    t.boolean  "from_parent",     default: false,  null: false
+    t.text     "locales",         default: [],                  array: true
+    t.boolean  "default_content", default: true,   null: false
+    t.string   "format",          default: "html", null: false
+    t.integer  "rows",            default: 15,     null: false
+    t.boolean  "inline",          default: false,  null: false
+    t.boolean  "line_break",      default: true,   null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   create_table "memberships", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -218,6 +288,10 @@ ActiveRecord::Schema.define(version: 20160423183021) do
   add_foreign_key "content_entries", "content_types"
   add_foreign_key "content_entries", "sites"
   add_foreign_key "content_types", "sites"
+  add_foreign_key "editable_controls", "pages"
+  add_foreign_key "editable_files", "pages"
+  add_foreign_key "editable_models", "pages"
+  add_foreign_key "editable_texts", "pages"
   add_foreign_key "memberships", "accounts"
   add_foreign_key "memberships", "sites"
   add_foreign_key "pages", "accounts", column: "created_by_id"

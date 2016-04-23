@@ -1,6 +1,11 @@
 class Page < ActiveRecord::Base
   belongs_to :site
 
+  has_many :editable_controls
+  has_many :editable_files
+  has_many :editable_models
+  has_many :editable_texts
+
   belongs_to :parent, class_name: "Page"
   has_many :children, class_name: "Page", foreign_key: "parent_id"
   belongs_to :layout, class_name: "Page"

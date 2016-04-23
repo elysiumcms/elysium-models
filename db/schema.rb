@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423133924) do
+ActiveRecord::Schema.define(version: 20160423160051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,16 @@ ActiveRecord::Schema.define(version: 20160423133924) do
     t.datetime "updated_at",                             null: false
   end
 
+  create_table "memberships", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "account_id"
+    t.uuid     "site_id"
+    t.string   "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "memberships", ["account_id", "site_id"], name: "index_memberships_on_account_id_and_site_id", unique: true, using: :btree
+
   create_table "sites", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.jsonb    "seo_title",                default: {},    null: false
     t.jsonb    "meta_keywords",            default: {},    null: false
@@ -74,5 +84,7 @@ ActiveRecord::Schema.define(version: 20160423133924) do
     t.datetime "updated_at",                               null: false
   end
 
+  add_foreign_key "memberships", "accounts"
+  add_foreign_key "memberships", "sites"
   add_foreign_key "sites", "accounts", column: "created_by_id"
 end

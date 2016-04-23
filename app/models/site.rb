@@ -4,6 +4,7 @@ class Site < ActiveRecord::Base
   has_many :theme_assets
   has_many :content_assets
   has_many :content_types
+  has_many :content_entries
   has_many :memberships
   has_many :account, through: :memberships
 

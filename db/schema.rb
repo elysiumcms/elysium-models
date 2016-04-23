@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423161732) do
+ActiveRecord::Schema.define(version: 20160423171541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,15 @@ ActiveRecord::Schema.define(version: 20160423161732) do
     t.datetime "updated_at",                               null: false
   end
 
+  create_table "snippets", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "site_id"
+    t.jsonb    "slug",       default: {}, null: false
+    t.string   "name"
+    t.jsonb    "template",   default: {}, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   add_foreign_key "memberships", "accounts"
   add_foreign_key "memberships", "sites"
   add_foreign_key "pages", "accounts", column: "created_by_id"
@@ -125,4 +134,5 @@ ActiveRecord::Schema.define(version: 20160423161732) do
   add_foreign_key "pages", "pages", column: "parent_id"
   add_foreign_key "pages", "sites"
   add_foreign_key "sites", "accounts", column: "created_by_id"
+  add_foreign_key "snippets", "sites"
 end

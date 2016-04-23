@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423172228) do
+ActiveRecord::Schema.define(version: 20160423172912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,18 @@ ActiveRecord::Schema.define(version: 20160423172228) do
     t.boolean  "super_admin",            default: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+  end
+
+  create_table "content_assets", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "site_id"
+    t.string   "checksum"
+    t.string   "content_type"
+    t.integer  "width"
+    t.integer  "height"
+    t.integer  "size"
+    t.integer  "position",     default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "memberships", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -140,6 +152,7 @@ ActiveRecord::Schema.define(version: 20160423172228) do
     t.datetime "updated_at",   null: false
   end
 
+  add_foreign_key "content_assets", "sites"
   add_foreign_key "memberships", "accounts"
   add_foreign_key "memberships", "sites"
   add_foreign_key "pages", "accounts", column: "created_by_id"

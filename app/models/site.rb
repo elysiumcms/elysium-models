@@ -1,6 +1,7 @@
 class Site < ActiveRecord::Base
   has_many :pages
   has_many :snippets
+  has_many :theme_assets
   has_many :memberships
   has_many :account, through: :memberships
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423171541) do
+ActiveRecord::Schema.define(version: 20160423172228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,6 +126,20 @@ ActiveRecord::Schema.define(version: 20160423171541) do
     t.datetime "updated_at",              null: false
   end
 
+  create_table "theme_assets", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "site_id"
+    t.string   "checksum"
+    t.string   "local_path"
+    t.string   "content_type"
+    t.integer  "width"
+    t.integer  "height"
+    t.integer  "size"
+    t.string   "folder"
+    t.string   "source"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   add_foreign_key "memberships", "accounts"
   add_foreign_key "memberships", "sites"
   add_foreign_key "pages", "accounts", column: "created_by_id"
@@ -135,4 +149,5 @@ ActiveRecord::Schema.define(version: 20160423171541) do
   add_foreign_key "pages", "sites"
   add_foreign_key "sites", "accounts", column: "created_by_id"
   add_foreign_key "snippets", "sites"
+  add_foreign_key "theme_assets", "sites"
 end

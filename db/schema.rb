@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160423111826) do
+ActiveRecord::Schema.define(version: 20160423133924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,4 +47,32 @@ ActiveRecord::Schema.define(version: 20160423111826) do
     t.datetime "updated_at",                             null: false
   end
 
+  create_table "sites", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.jsonb    "seo_title",                default: {},    null: false
+    t.jsonb    "meta_keywords",            default: {},    null: false
+    t.jsonb    "meta_description",         default: {},    null: false
+    t.string   "handle"
+    t.text     "domains",                  default: [],                 array: true
+    t.boolean  "redirect_to_first_domain", default: false, null: false
+    t.text     "locales",                  default: [],                 array: true
+    t.boolean  "prefix_default_locale",    default: false, null: false
+    t.string   "timezone_name",            default: "UTC", null: false
+    t.boolean  "cache_enabled",            default: false, null: false
+    t.datetime "template_version"
+    t.datetime "content_version"
+    t.text     "url_redirections",         default: [],                 array: true
+    t.boolean  "private_access",           default: false, null: false
+    t.string   "password"
+    t.jsonb    "metafields",               default: {},    null: false
+    t.text     "metafields_schema",        default: [],                 array: true
+    t.jsonb    "metafields_ui",            default: {},    null: false
+    t.string   "name"
+    t.string   "robots_txt"
+    t.string   "picture"
+    t.uuid     "created_by_id"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  add_foreign_key "sites", "accounts", column: "created_by_id"
 end
